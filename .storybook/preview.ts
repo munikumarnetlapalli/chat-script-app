@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react';
 import '../client/src/index.css';
+import React from 'react';
 
 const preview: Preview = {
   parameters: {
@@ -39,6 +40,24 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story, context) => {
+      const theme = context.globals.theme || 'light';
+      
+      return React.createElement(
+        'div',
+        {
+          className: theme === 'dark' ? 'dark' : '',
+          style: {
+            minHeight: '100vh',
+            backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
+            padding: '1rem',
+          },
+        },
+        React.createElement(Story)
+      );
+    },
+  ],
 };
 
 export default preview;

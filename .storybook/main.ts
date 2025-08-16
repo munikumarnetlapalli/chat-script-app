@@ -24,15 +24,13 @@ const config: StorybookConfig = {
     },
   },
   viteFinal: async (config) => {
-    // Ensure Tailwind CSS is included
-    if (config.css) {
-      config.css.postcss = {
-        plugins: [
-          require('tailwindcss'),
-          require('autoprefixer'),
-        ],
-      };
-    }
+    const path = await import('path');
+    // Add path alias
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, '../client/src'),
+    };
     return config;
   },
 };
