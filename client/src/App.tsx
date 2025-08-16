@@ -1,29 +1,19 @@
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/home";
+import { useEffect, useState } from "react";
 
-function Router() {
+export default function App() {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    fetch("/api/test")
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message))
+      .catch(console.error);
+  }, []);
+
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
+    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+      <h1>Test API Message:</h1>
+      <p>{message}</p>
+    </div>
   );
 }
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
-}
-
-export default App;
