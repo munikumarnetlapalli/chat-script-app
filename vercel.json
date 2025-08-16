@@ -1,17 +1,20 @@
 {
-  "version": 3,
+  "version": 2,
   "builds": [
+    {
+      "src": "server/index.ts",
+      "use": "@vercel/node",
+      "config": { "maxLambdaSize": "50mb" }
+    },
     {
       "src": "client/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "../dist/public" }
-    },
-    {
-      "src": "server/index.ts",
-      "use": "@vercel/node"
+      "config": {
+        "distDir": "dist/public"
+      }
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "/(.*)", "dest": "/server/index.ts" }
   ]
 }

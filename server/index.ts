@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+  let capturedJsonResponse: Record<string, any> | undefined;
 
   const originalResJson = res.json;
   res.json = function (bodyJson, ...args) {
@@ -22,9 +22,7 @@ app.use((req, res, next) => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
+      if (capturedJsonResponse) logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
       if (logLine.length > 80) logLine = logLine.slice(0, 79) + "…";
       log(logLine);
     }
@@ -33,8 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  // Register routes and get HTTP server
+export default async function startServer() {
   const server = await registerRoutes(app);
 
   // Error handling
@@ -45,8 +42,8 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Setup Vite in development
-  if (app.get("env") === "development") {
+  // Setup Vite in dev or serve static in prod
+  if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
@@ -56,4 +53,4 @@ app.use((req, res, next) => {
   server.listen(PORT, () => {
     log(`Server running at http://127.0.0.1:${PORT}`);
   });
-})();
+}
