@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Eye, EyeOff, X, Loader2 } from 'lucide-react';
 
-export interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputFieldProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;

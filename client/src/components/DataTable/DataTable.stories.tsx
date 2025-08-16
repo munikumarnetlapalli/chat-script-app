@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DataTable } from './DataTable';
+import { DataTable, Column } from './DataTable';
 
 interface User {
   id: number;
@@ -63,7 +63,7 @@ const userColumns = [
   },
 ];
 
-const meta: Meta<typeof DataTable> = {
+const meta: Meta<typeof DataTable<User>> = {
   title: 'Components/DataTable',
   component: DataTable,
   parameters: {
@@ -92,7 +92,7 @@ const meta: Meta<typeof DataTable> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof DataTable>;
+type Story = StoryObj<typeof DataTable<User>>;
 
 export const Default: Story = {
   args: {
@@ -106,7 +106,7 @@ export const WithSelection: Story = {
     data: sampleUsers,
     columns: userColumns,
     selectable: true,
-    onRowSelect: (selectedRows) => {
+    onRowSelect: (selectedRows: any[]) => {
       console.log('Selected rows:', selectedRows);
     },
   },
